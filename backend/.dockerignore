@@ -1,0 +1,12 @@
+bin/
+obj/
+.vs/
+**/bin/
+**/obj/
+*.user
+*.vspscc
+*.vssscc
+*.suo
+*.user
+*.cache
+.idea/
