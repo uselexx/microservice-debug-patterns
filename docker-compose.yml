@@ -7,6 +7,7 @@ services:
     image: microservice-debug-backend:latest
     ports:
       - "5000:5000"
+      - "5001:5001"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=dashboard;Username=postgres;Password=postgres
