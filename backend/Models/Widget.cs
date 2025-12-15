@@ -1,5 +1,7 @@
 namespace backend.Models;
 
+using System.Text.Json.Serialization;
+
 public class Widget
 {
     public int Id { get; set; }
@@ -11,5 +13,6 @@ public class Widget
     public DateTime? UpdatedAt { get; set; }
     
     // Foreign key
+    [JsonIgnore]
     public Dashboard Dashboard { get; set; } = null!;
 }

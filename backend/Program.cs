@@ -50,8 +50,9 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.MapHub<DashboardHub>("/hubs/dashboard");
 
-// Map weather endpoints from dedicated file
+// Map endpoints
 app.MapWeather();
+app.MapDashboard();
 
 // Start broadcasting updates in the background
 _ = Task.Run(async () =>
