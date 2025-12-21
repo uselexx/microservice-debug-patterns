@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { AssistantService } from '../../assistant';
 import { FormsModule } from '@angular/forms';
 
@@ -12,6 +12,11 @@ import { FormsModule } from '@angular/forms';
 export class ProductSelectionStep {
   private assistant = inject(AssistantService);
   username: string = '';
+
+  previousUsername = computed(() => {
+    const data = this.assistant.collectedData();
+    return data.username || 'N/A';
+  });
 
   submit() {
     // Directly tell the service to move to the next step

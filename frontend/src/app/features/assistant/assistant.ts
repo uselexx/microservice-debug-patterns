@@ -27,7 +27,7 @@ export class AssistantService {
   isOpen = signal(false);
   currentStepIndex = signal(0);
   currentWorkflow = signal<Type<any>[]>([]); // Store Class references
-  collectedData = signal<Record<string, any>>({});
+  collectedData = signal<AssistantState>({});
 
   // Computed signal for the UI to bind to
   currentComponent = computed(() => {
@@ -59,4 +59,10 @@ export class AssistantService {
     this.currentWorkflow.set([]);
     this.currentStepIndex.set(0);
   }
+}
+
+export interface AssistantState {
+  address?: string;
+  username?: string;
+  paymentMethod?: string;
 }
