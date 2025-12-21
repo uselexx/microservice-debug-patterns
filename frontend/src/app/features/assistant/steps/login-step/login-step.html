@@ -1,14 +1,29 @@
 <div class="step-layout">
-    <h3 class="step-title">Shipping Address</h3>
-    
-    <div class="step-content">
-        <label class="input-label">Username</label>
-        <input class="step-input" [(ngModel)]="username" placeholder="Enter your username...">
+    <div class="step-title">
+        <ng-container>
+            @if (isloading) {
+            <div class="typing-indicator">
+                <span></span><span></span><span></span>
+            </div>
+            } @else {
+            <span class="assistant-text">{{ assistantGreeting }}</span>
+            }
+        </ng-container>
     </div>
 
-    <div class="step-actions">
-        <button class="primary-btn" [disabled]="!username" (click)="submit()">
-            Continue
-        </button>
+    @if (!isloading && assistantGreeting) {
+    <div class="step-form-area animate-reveal">
+        <div class="step-content">
+            <label class="input-label">Username</label>
+            <input class="step-input" [(ngModel)]="username" placeholder="Enter your username..."
+                (keyup.enter)="username && submit()">
+        </div>
+
+        <div class="step-actions">
+            <button class="primary-btn" [disabled]="!username" (click)="submit()">
+                Continue
+            </button>
+        </div>
     </div>
+    }
 </div>

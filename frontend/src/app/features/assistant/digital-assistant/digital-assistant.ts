@@ -1,5 +1,5 @@
 import { CommonModule, NgComponentOutlet } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AssistantService } from '../assistant';
 
 @Component({
@@ -10,6 +10,8 @@ import { AssistantService } from '../assistant';
   styleUrl: './digital-assistant.css',
 })
 export class DigitalAssistant {
+
+
   constructor(public assistant: AssistantService) { }
 
   handleStepComplete = (data: any) => {
@@ -17,6 +19,8 @@ export class DigitalAssistant {
       this.assistant.next(data);
     }
   };
+
+
 
   /**
    * Optional: Logic to handle clicking outside or escape key to close

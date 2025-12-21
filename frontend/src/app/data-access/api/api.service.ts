@@ -9,9 +9,9 @@ import { WeatherForecast, ApiResponse } from '../models';
 })
 export class ApiService {
   // private readonly baseUrl = '/api';
-  private readonly baseUrl = 'http://localhost:5000';
+  private readonly baseUrl = 'https://localhost:7093';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Get weather forecast from backend
@@ -31,15 +31,16 @@ export class ApiService {
     );
   }
 
-  /**
-   * Generic POST request
-   */
-  post<T>(endpoint: string, payload: any): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}${endpoint}`, payload).pipe(
-      catchError(this.handleError)
-    );
-  }
 
+  /**
+   * Generic POST request with configurable response type
+   */
+  post<T>(endpoint: string, payload: any, options: any = {}): Observable<T> {
+    return this.http.post<T>(`${this.baseUrl}${endpoint}`, payload, {
+      ...options
+    }) as Observable<T>; // Explicitly cast to the expected Return Type
+  }
+  
   /**
    * Generic PUT request
    */

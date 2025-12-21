@@ -20,13 +20,9 @@
 
         @if (assistant.currentComponent(); as activeStep) {
         <div class="chat-bubble assistant-msg animate-slide-up">
-            <div class="step-progress">
-                Step {{ assistant.currentStepIndex() + 1 }} of {{ assistant.currentWorkflow().length }}
-            </div>
-            <div class="component-wrapper">
-                <ng-container *ngComponentOutlet="activeStep" />
-            </div>
+            Step {{ assistant.currentStepIndex() + 1 }} of {{ assistant.currentWorkflow().length }}
         </div>
+        <ng-container *ngComponentOutlet="activeStep" />
         <button class="home-link" (click)="assistant.reset()">✕ Cancel process</button>
         }
 

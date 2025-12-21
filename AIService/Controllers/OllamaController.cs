@@ -18,26 +18,22 @@ public class OllamaController : ControllerBase
         _service = service;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> Get(string prompt)
+    [HttpPost]
+    public async Task<IActionResult> Get([FromBody] MistralRequest request)
     {
         var stopwatch = Stopwatch.StartNew(); // Starts and creates the instance in one line
 
         try
         {
-            var response = await _service.AskMistralAsync(prompt);
+            var response = await _service.AskMistralAsync(request.Prompt);
 
             stopwatch.Stop();
 
             // Use structured logging with a template for better performance and searchability
             _logger.LogInformation("Mistral responded in {ElapsedMilliseconds}ms for prompt: {Prompt}",
-                stopwatch.ElapsedMilliseconds, prompt);
+                stopwatch.ElapsedMilliseconds, request.Prompt);
 
-            return Ok(new
-            {
-                Result = response,
-                ElapsedMs = stopwatch.ElapsedMilliseconds
-            });
+            return Ok(response);
         }
         catch (Exception ex)
         {
@@ -47,3 +43,5 @@ public class OllamaController : ControllerBase
         }
     }
 }
+
+public record MistralRequest(string Prompt);

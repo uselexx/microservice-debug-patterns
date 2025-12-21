@@ -8,74 +8,178 @@
   --assistant-radius: 12px;
 }
 
-/* Container for every step */
-.step-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  animation: fadeIn 0.3s ease-in;
-}
-
+/* Digital Assistant Step Layout Enhancements */
+.assistant-msg, 
 .step-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin: 0;
-  color: var(--assistant-text);
+  align-self: flex-start;
+  max-width: 85%;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 15px 15px 15px 5px;
+  /* Rounded chat bubble look */
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.input-label {
-  display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #666;
-  margin-bottom: 6px;
+/* 1. Force Vertical Stack to avoid horizontal overflow */
+.step-layout {
+    display: flex !important;
+    flex-direction: column !important; 
+    gap: 16px;
+    width: 100%;
+    overflow-x: hidden; /* Safety measure */
 }
 
-/* Modern Input Style */
+/* 2. Left Side: The Assistant's Question */
+.step-prompt {
+    align-self: flex-start; /* Push to the left */
+    max-width: 85%;
+}
+
+/* .step-title {
+    background: #ffffff;
+    padding: 12px 16px;
+    border: 1px solid #e9ecef;
+    border-radius: 18px 18px 18px 4px;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 0;
+    color: #333;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+} */
+
+/* 3. Right Side: The User's Form area */
+.step-form-area {
+    align-self: flex-end;
+    width: 80%; /* Takes up most of the width but stays on the right */
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.step-content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* The input field now looks like a 'User' chat bubble */
 .step-input {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1.5px solid var(--assistant-border);
-  border-radius: var(--assistant-radius);
-  font-size: 14px;
-  transition: all 0.2s ease;
-  box-sizing: border-box; /* Crucial for width: 100% */
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--assistant-primary);
+    border-radius: 18px 18px 4px 18px; /* Tail on bottom-right */
+    font-size: 14px;
+    background: #ffffff;
+    box-sizing: border-box; /* Prevents padding from causing overflow */
+    outline: none;
 }
 
 .step-input:focus {
-  outline: none;
-  border-color: var(--assistant-primary);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
 }
 
-/* Primary Action Button */
+/* Label aligned with the user bubble */
+.input-label {
+    font-size: 11px;
+    color: #888;
+    text-align: right;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+
+/* 4. Actions / Button */
+.step-actions {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
 .primary-btn {
-  width: 100%;
-  padding: 12px;
-  background-color: var(--assistant-primary);
-  color: white;
-  border: none;
-  border-radius: var(--assistant-radius);
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: transform 0.1s active, background 0.2s;
+    min-width: 120px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: 600;
 }
 
 .primary-btn:hover:not(:disabled) {
-  background-color: #0056b3;
+    background-color: #0056b3;
+    transform: translateY(-1px);
 }
 
 .primary-btn:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    box-shadow: none;
+    transform: none;
 }
 
-.primary-btn:active:not(:disabled) {
-  transform: scale(0.98);
+/* Container for the form reveal */
+.animate-reveal {
+    animation: slideUpFade 0.4s ease-out forwards;
 }
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Ensure the assistant text also fades in nicely */
+.assistant-text {
+    display: block;
+    animation: fadeIn 0.3s ease-in forwards;
+}
+
+/* @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+} */
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Typing Indicator Container */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    height: 20px;
+}
+
+/* The Dots */
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background-color: #007bff; /* Use your assistant primary color */
+    border-radius: 50%;
+    display: inline-block;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+
+/* Animation Delays to create the wave effect */
+.typing-indicator span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+    0%, 80%, 100% { 
+        transform: scale(0);
+        opacity: 0.3;
+    } 
+    40% { 
+        transform: scale(1.0);
+        opacity: 1;
+    }
 }

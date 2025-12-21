@@ -1,12 +1,18 @@
 // assistant.service.ts
-import { Injectable, signal, computed, Type } from '@angular/core';
+import { Injectable, signal, computed, Type, inject } from '@angular/core';
 import { ProcessDefinition } from './workflow.model';
 import { LoginStep } from './steps/login-step/login-step';
 import { ProductSelectionStep } from './steps/product-selection-step/product-selection-step';
 import { AddressSelectionStep } from './steps/address-selection-step/address-selection-step';
+import { ApiService } from '../../data-access/api/api.service';
 
 @Injectable({ providedIn: 'root' })
 export class AssistantService {
+  private apiService = inject(ApiService);
+  private basePrompt = `You are a concise Digital Assistant. 
+    Respond in 1-2 short sentences maximum. 
+    Greet the user briefly and give instructions for the current step.`;
+
   public readonly availableProcesses: ProcessDefinition[] = [
     {
       id: 'ORDER',
@@ -58,6 +64,21 @@ export class AssistantService {
   reset() {
     this.currentWorkflow.set([]);
     this.currentStepIndex.set(0);
+  }
+
+  callLLM(stepContext: string, userPrompt: string = '') {
+    // Determine if this is a first-time greeting or a follow-up
+    const behaviorInstruction = !userPrompt
+      ? "This is the start of the step. Introduce yourself and tell the user what to do."
+      : "The user has responded. Acknowledge them and guide them further.";
+
+    const fullPrompt = `
+      ${this.basePrompt}
+      BEHAVIOR: ${behaviorInstruction}
+      CONTEXT: ${stepContext}
+      ${userPrompt ? `USER SAID: ${userPrompt}` : ''}
+      `.trim();
+    return this.apiService.post<string>('/Ollama', { prompt: fullPrompt }, { responseType: 'text' });
   }
 }
 
