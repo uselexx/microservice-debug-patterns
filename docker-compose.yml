@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   backend:
     build:
@@ -88,7 +87,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=admin@example.com
       - PGADMIN_DEFAULT_PASSWORD=admin
     ports:
-      - "8080:80"
+      - "8081:80"
     depends_on:
       - postgres
 
@@ -103,10 +102,27 @@ services:
       timeout: 15s
       retries: 5
 
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_storage:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
 networks:
   default:
     driver: bridge
  
 volumes:
+  ollama_storage:
+    driver: local
   postgres_data:
     driver: local
