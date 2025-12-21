@@ -1,25 +1,27 @@
-<div class="filter-container">
+<div class="filter-container" [class.is-loading]="isLoading">
   <form [formGroup]="filterForm" class="filter-grid">
+    
+    <ng-container *ngIf="isLoading && config.length === 0">
+      <div *ngFor="let i of [1,2,3]" class="filter-item skeleton">
+        <div class="skeleton-label"></div>
+        <div class="skeleton-input"></div>
+      </div>
+    </ng-container>
 
     <div *ngFor="let item of config" class="filter-item">
       <label [for]="item.key">{{ item.label }}</label>
+      
+      <input *ngIf="item.type === 'text'" [formControlName]="item.key" placeholder="Search...">
 
-      <input *ngIf="item.type === 'text'" [formControlName]="item.key" type="text" placeholder="Search...">
-
-      <select *ngIf="item.type === 'select' || item.type === 'multiselect'" [formControlName]="item.key"
-        [multiple]="item.type === 'multiselect'">
+      <select *ngIf="item.type === 'select' || item.type === 'multiselect'" 
+              [formControlName]="item.key" [multiple]="item.type === 'multiselect'">
         <option value="">All</option>
-        <option *ngFor="let opt of item.options" [value]="opt.value">
-          {{ opt.label }}
-        </option>
+        <option *ngFor="let opt of item.options" [value]="opt.value">{{ opt.label }}</option>
       </select>
     </div>
 
-    <div class="actions">
-      <button type="button" class="reset-btn" (click)="resetFilters()">
-        Reset Filters
-        <span *ngIf="activeFilterCount > 0" class="badge">{{ activeFilterCount }}</span>
-      </button>
-    </div>
+    <button type="button" class="reset-btn" [disabled]="isLoading" (click)="resetFilters()">
+      Reset <span *ngIf="activeFilterCount > 0" class="badge">{{ activeFilterCount }}</span>
+    </button>
   </form>
 </div>

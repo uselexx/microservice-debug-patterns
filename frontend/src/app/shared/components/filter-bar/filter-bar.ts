@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -8,21 +8,29 @@ import { FormGroup, FormControl, ReactiveFormsModule } from '@angular/forms';
   templateUrl: './filter-bar.html',
   styleUrl: './filter-bar.css',
 })
-export class FilterBar implements OnInit {
+export class FilterBar implements OnInit, OnChanges {
   @Input() config: FilterConfig[] = [];
+  @Input() isLoading = false; // New input for loading state
   @Output() onFilterChange = new EventEmitter<any>();
 
   filterForm = new FormGroup({});
 
   ngOnInit() {
-    // Dynamically build the form based on config
-    this.config.forEach(control => {
-      this.filterForm.addControl(control.key, new FormControl(''));
-    });
+    this.buildForm();
+  }
 
-    // Emit changes (debounced for text fields)
-    this.filterForm.valueChanges.subscribe(val => {
-      this.onFilterChange.emit(val);
+  ngOnChanges(changes: SimpleChanges) {
+    // When config updates from the API, rebuild the form controls
+    if (changes['config'] && !changes['config'].firstChange) {
+      this.buildForm();
+    }
+  }
+
+  private buildForm() {
+    this.config.forEach(control => {
+      if (!this.filterForm.contains(control.key)) {
+        this.filterForm.addControl(control.key, new FormControl(''));
+      }
     });
   }
 

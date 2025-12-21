@@ -24,6 +24,7 @@ export class HomeComponent implements OnInit {
   }
 
   loadFilterMetadata(): void {
+    this.isLoading.set(true);
     this.apiService.get<any>('/movies/filters').subscribe({
       next: (data) => {
         // Set the config signal with the API response
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit {
           { key: 'category', label: 'Category', type: 'select', options: data.categories },
           { key: 'tags', label: 'Tags', type: 'multiselect', options: data.tags }
         ]);
+        this.isLoading.set(false);
       },
       error: (err) => console.error('Error loading filter data:', err)
     });
@@ -42,7 +44,6 @@ export class HomeComponent implements OnInit {
   }
 
   onFetchWeather(): void {
-    this.isLoading.set(true);
     this.errorMessage.set('');
     this.weatherData.set([]);
 
