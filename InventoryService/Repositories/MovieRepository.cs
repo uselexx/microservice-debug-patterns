@@ -1,5 +1,6 @@
 ﻿using InventoryService.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using Shared.Contracts;
 
 namespace InventoryService.Repositories;
 
@@ -25,6 +26,18 @@ public interface IMovieRepository
         CancellationToken cancellationToken);
 
     void UpdateRange(IReadOnlyCollection<MovieEntity> movies);
+
+    Task<MovieEntity?> FindAsync(
+    string? title,
+    string? description,
+    int? legacyId,
+    CancellationToken cancellationToken);
+
+    Task<PagedResponse<MovieEntity>> GetPagedAsync(
+        int? cursor,
+        int pageSize,
+        CancellationToken cancellationToken = default);
+
 }
 
 public class MovieRepository : IMovieRepository
@@ -110,5 +123,53 @@ public class MovieRepository : IMovieRepository
             return;
 
         _db.Movies.UpdateRange(movies);
+    }
+
+    public async Task<MovieEntity?> FindAsync(string? title, string? description, int? legacyId, CancellationToken cancellationToken)
+    {
+        var query = _db.Movies.AsNoTracking().AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(title))
+            query = query.Where(x => x.Title.Contains(title));
+
+        if (!string.IsNullOrWhiteSpace(description))
+            query = query.Where(x => x.Overview!.Contains(description));
+
+        if (legacyId.HasValue)
+            query = query.Where(x => x.LegacyId == legacyId);
+
+        return await query.FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<PagedResponse<MovieEntity>> GetPagedAsync(
+        int? cursor,
+        int pageSize,
+        CancellationToken cancellationToken = default)
+    {
+        // 1. Create the base query with NoTracking for performance
+        var query = _db.Movies
+            .AsNoTracking()
+            .OrderBy(x => x.Id)
+            .AsQueryable();
+
+        // 2. Apply the cursor filter if it exists
+        if (cursor.HasValue)
+        {
+            query = query.Where(x => x.Id > cursor.Value);
+        }
+
+        // 3. Fetch pageSize + 1 to determine if there's a next page
+        var items = await query
+            .Take(pageSize + 1)
+            .ToListAsync(cancellationToken);
+
+        // 4. Calculate metadata
+        var hasMore = items.Count > pageSize;
+        var data = items.Take(pageSize).ToList();
+
+        // Use the ID of the last element in the 'data' list as the next cursor
+        var nextCursor = hasMore ? data.Last().Id : (int?)null;
+
+        return new PagedResponse<MovieEntity>(data, nextCursor, hasMore);
     }
 }

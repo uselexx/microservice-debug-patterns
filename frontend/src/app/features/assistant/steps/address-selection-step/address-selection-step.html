@@ -1,0 +1,14 @@
+<div class="step-layout">
+    <h3 class="step-title">Shipping Address</h3>
+    
+    <div class="step-content">
+        <label class="input-label">Street & Number</label>
+        <input class="step-input" [(ngModel)]="address" placeholder="123 Street Name...">
+    </div>
+
+    <div class="step-actions">
+        <button class="primary-btn" [disabled]="!address" (click)="submit()">
+            Continue
+        </button>
+    </div>
+</div>

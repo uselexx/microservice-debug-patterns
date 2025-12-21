@@ -1,0 +1,14 @@
+<div class="step-layout">
+    <h3 class="step-title">Shipping Address</h3>
+    
+    <div class="step-content">
+        <label class="input-label">Username</label>
+        <input class="step-input" [(ngModel)]="username" placeholder="Enter your username...">
+    </div>
+
+    <div class="step-actions">
+        <button class="primary-btn" [disabled]="!username" (click)="submit()">
+            Continue
+        </button>
+    </div>
+</div>

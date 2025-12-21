@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SignalrService, DashboardUpdate } from '../../data-access/signalr/signalr.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { AssistantService } from '../assistant/assistant';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +22,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   protected currentUpdate = signal<DashboardUpdate | null>(null);
   protected updateHistory = signal<DashboardUpdate[]>([]);
 
+  constructor(public assistant: AssistantService) {}
+  
   ngOnInit(): void {
     this.signalrServicePrivate.connect()
       .then(() => {

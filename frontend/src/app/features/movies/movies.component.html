@@ -1,0 +1,27 @@
+<div class="container">
+  <h2>Movie Database (1M+ Entries)</h2>
+
+  <cdk-virtual-scroll-viewport itemSize="80" class="movie-viewport">
+    
+    <div *cdkVirtualFor="let item of dataSource" class="movie-card">
+      <div class="movie-info">
+        <span class="movie-id">#{{ item.movie.id }}</span>
+        <div class="details">
+          <h3 class="movie-title">{{ item.movie.title }}</h3>
+          <p class="movie-meta">
+            Release: {{ item.movie.releaseDate | date:'mediumDate' }} | 
+            Popularity: {{ item.movie.popularity }}
+          </p>
+        </div>
+      </div>
+      <div class="movie-actions">
+        <button class="btn-view">View Details</button>
+      </div>
+    </div>
+
+    <div *ngIf="dataSource.loading$ | async" class="loading-spinner">
+      Loading more movies...
+    </div>
+
+  </cdk-virtual-scroll-viewport>
+</div>

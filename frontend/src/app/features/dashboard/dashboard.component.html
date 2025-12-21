@@ -39,13 +39,19 @@
   <div class="updates-log">
     <h2>Update History</h2>
     <div class="log-container">
-      <div *ngFor="let update of updateHistory(); let first = first" 
-           class="log-entry" 
-           [class.latest]="first">
+      <div *ngFor="let update of updateHistory(); let first = first" class="log-entry" [class.latest]="first">
         <span class="timestamp">{{ update.timestamp }}</span>
         <span class="status" [class]="update.status.toLowerCase()">{{ update.status }}</span>
-        <span class="metrics">CPU: {{ update.cpuUsage }}% | Memory: {{ update.memoryUsage }}% | Requests: {{ update.requestCount }}</span>
+        <span class="metrics">CPU: {{ update.cpuUsage }}% | Memory: {{ update.memoryUsage }}% | Requests: {{
+          update.requestCount }}</span>
       </div>
     </div>
+  </div>
+
+  <div class="card">
+    <h3>MacBook Pro</h3>
+    <button (click)="assistant.open()">
+      Open Assistant
+    </button>
   </div>
 </div>

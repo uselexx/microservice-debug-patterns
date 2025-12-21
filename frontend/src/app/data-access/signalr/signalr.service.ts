@@ -30,7 +30,7 @@ export class SignalrService {
     return new Promise((resolve, reject) => {
       try {
         this.hubConnection = new HubConnectionBuilder()
-          .withUrl('/hubs/dashboard')
+          .withUrl('http://localhost:5000/hubs/dashboard')
           .withAutomaticReconnect([0, 0, 0, 5000, 5000, 5000])
           .configureLogging(LogLevel.Information)
           .build();

@@ -10,24 +10,61 @@ services:
       - "5001:5001"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=dashboard;Username=postgres;Password=postgres
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:5000/swagger/index.html || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 3
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
 
-  frontend:
+  # orderService:
+  #   build:
+  #     context: .
+  #     dockerfile: OrderService/Dockerfile
+  #   image: microservice-debug-order-service:latest
+  #   ports:
+  #     - "5002:5000"
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #   logging:
+  #     driver: "json-file"
+  #     options:
+  #       max-size: "10m"
+  #       max-file: "3"
+
+  inventoryService:
     build:
       context: .
-      dockerfile: frontend/Dockerfile
-    image: microservice-debug-frontend:latest
+      dockerfile: InventoryService/Dockerfile
+    image: microservice-debug-inventory-service:latest
     ports:
-      - "4200:80"
+      - "5003:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     depends_on:
-      - backend
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: frontend/Dockerfile
+  #   image: microservice-debug-frontend:latest
+  #   ports:
+  #     - "4200:80"
+  #   depends_on:
+  #     - backend
 
   postgres:
     image: postgres:15
@@ -54,7 +91,17 @@ services:
       - "8080:80"
     depends_on:
       - postgres
-  
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
+      interval: 5s
+      timeout: 15s
+      retries: 5
 
 networks:
   default:

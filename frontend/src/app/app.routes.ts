@@ -12,6 +12,11 @@ export const routes: Routes = [
       import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
   },
   {
+    path: 'movies',
+    loadComponent: () =>
+      import('./features/movies/movies.component').then(m => m.MoviesComponent),
+  },
+  {
     path: '**',
     redirectTo: '',
   }

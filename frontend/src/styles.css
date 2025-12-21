@@ -1,1 +1,81 @@
 /* You can add global styles to this file, and also import other style files */
+/* Variables for easy theming */
+:root {
+  --assistant-primary: #007bff;
+  --assistant-bg: #ffffff;
+  --assistant-text: #333333;
+  --assistant-border: #e0e0e0;
+  --assistant-radius: 12px;
+}
+
+/* Container for every step */
+.step-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.step-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--assistant-text);
+}
+
+.input-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 6px;
+}
+
+/* Modern Input Style */
+.step-input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--assistant-border);
+  border-radius: var(--assistant-radius);
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-sizing: border-box; /* Crucial for width: 100% */
+}
+
+.step-input:focus {
+  outline: none;
+  border-color: var(--assistant-primary);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+/* Primary Action Button */
+.primary-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--assistant-primary);
+  color: white;
+  border: none;
+  border-radius: var(--assistant-radius);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.1s active, background 0.2s;
+}
+
+.primary-btn:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+.primary-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.primary-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

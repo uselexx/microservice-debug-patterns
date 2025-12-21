@@ -8,7 +8,8 @@ import { WeatherForecast, ApiResponse } from '../models';
   providedIn: 'root'
 })
 export class ApiService {
-  private readonly baseUrl = '/api';
+  // private readonly baseUrl = '/api';
+  private readonly baseUrl = 'http://localhost:5000';
 
   constructor(private http: HttpClient) {}
 

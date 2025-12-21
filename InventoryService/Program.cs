@@ -1,6 +1,8 @@
-﻿using InventoryService.Jobs;
+﻿using InventoryService.Features;
+using InventoryService.Jobs;
 using InventoryService.Repositories;
 using InventoryService.Services;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,32 +48,54 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<MovieImportService>();
 
 // register Quartz job
-builder.Services.AddQuartz(q =>
+
+// Deactivated because the job runs 22 Minutes at the moment
+// Will be added later when improved
+//builder.Services.AddQuartz(q =>
+//{
+//    var jobKey = new JobKey(nameof(MovieImportJob));
+
+//    q.AddJob<MovieImportJob>(opts => opts.WithIdentity(jobKey));
+
+//    // Trigger 1: run immediately on startup
+//    q.AddTrigger(opts => opts
+//        .ForJob(jobKey)
+//        .WithIdentity("StartupTrigger")
+//        .StartNow()
+//    );
+
+//    // Trigger 2: Run every hour
+//    q.AddTrigger(opts => opts
+//        .ForJob(jobKey)
+//        .WithIdentity("HourlyTrigger")
+//        .WithSimpleSchedule(x => x
+//            .WithIntervalInHours(1)
+//            .RepeatForever())
+//    );
+//});
+
+//builder.Services.AddQuartzHostedService(options =>
+//{
+//    options.WaitForJobsToComplete = true;
+//});
+
+// Add mass transit
+
+builder.Services.AddMassTransit(x =>
 {
-    var jobKey = new JobKey(nameof(MovieImportJob));
+    x.AddConsumer<GetMovieHandler>();
+    x.AddConsumer<GetMoviesHandler>();
 
-    q.AddJob<MovieImportJob>(opts => opts.WithIdentity(jobKey));
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq", "/", h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
 
-    // Trigger 1: run immediately on startup
-    q.AddTrigger(opts => opts
-        .ForJob(jobKey)
-        .WithIdentity("StartupTrigger")
-        .StartNow()
-    );
-
-    // Trigger 2: Run every hour
-    q.AddTrigger(opts => opts
-        .ForJob(jobKey)
-        .WithIdentity("HourlyTrigger")
-        .WithSimpleSchedule(x => x
-            .WithIntervalInHours(1)
-            .RepeatForever())
-    );
-});
-
-builder.Services.AddQuartzHostedService(options =>
-{
-    options.WaitForJobsToComplete = true;
+        cfg.ConfigureEndpoints(context);
+    });
 });
 
 var host = builder.Build();

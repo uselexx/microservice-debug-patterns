@@ -1,0 +1,48 @@
+@if (assistant.isOpen()) {
+<div class="assistant-window animate-pop">
+
+    <div class="assistant-header">
+        <div class="header-info">
+            <span class="status-dot"></span>
+            <span class="header-title">Digital Assistant</span>
+        </div>
+        <button class="close-header-btn" (click)="assistant.isOpen.set(false)" aria-label="Close">
+            ✕
+        </button>
+    </div>
+
+    <div class="content">
+        <div class="chat-bubble assistant-msg">
+            <div class="component-wrapper">
+                Hello! I'm your digital assistant. How can I help you today?
+            </div>
+        </div>
+
+        @if (assistant.currentComponent(); as activeStep) {
+        <div class="chat-bubble assistant-msg animate-slide-up">
+            <div class="step-progress">
+                Step {{ assistant.currentStepIndex() + 1 }} of {{ assistant.currentWorkflow().length }}
+            </div>
+            <div class="component-wrapper">
+                <ng-container *ngComponentOutlet="activeStep" />
+            </div>
+        </div>
+        <button class="home-link" (click)="assistant.reset()">✕ Cancel process</button>
+        }
+
+        @else if (assistant.currentWorkflow().length === 0) {
+        <div class="menu-grid">
+            @for (process of assistant.availableProcesses; track process.id) {
+            <button class="menu-card" (click)="assistant.startProcess(process.steps)">
+                <span class="icon">{{ process.icon }}</span>
+                <div class="text">
+                    <strong>{{ process.label }}</strong>
+                    <small>{{ process.description }}</small>
+                </div>
+            </button>
+            }
+        </div>
+        }
+    </div>
+</div>
+}

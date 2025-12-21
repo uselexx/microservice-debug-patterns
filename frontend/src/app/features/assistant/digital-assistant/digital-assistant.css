@@ -1,0 +1,119 @@
+/* New Container for the whole window */
+.assistant-window {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 380px;
+    max-height: 70vh;
+    background: #f8f9fa;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column; /* Stack header and content */
+    overflow: hidden; /* Keeps header corners rounded */
+    z-index: 1000;
+}
+
+/* Header Styles */
+.assistant-header {
+    background: #007bff;
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #4ade80; /* Green online indicator */
+    border-radius: 50%;
+    box-shadow: 0 0 5px #4ade80;
+}
+
+.header-title {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.close-header-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+
+.close-header-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Updated Content Styles */
+.content {
+    flex: 1; /* Take up remaining space */
+    padding: 20px;
+    overflow-y: auto; /* Only the chat bubbles scroll */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+/* Menu Grid for Process Selection */
+.menu-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.menu-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  border: 1px solid #e9ecef;
+  padding: 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.menu-card:hover {
+  background: #f0f7ff;
+  border-color: #007bff;
+  transform: translateX(5px);
+}
+
+.menu-card .icon {
+  font-size: 20px;
+  background: #e7f1ff;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+
+.menu-card strong {
+  display: block;
+  font-size: 14px;
+  color: #212529;
+}
+.menu-card small {
+  font-size: 12px;
+  color: #6c757d;
+}

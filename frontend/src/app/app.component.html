@@ -2,6 +2,16 @@
   <app-navbar></app-navbar>
   <main class="main-content">
     <router-outlet></router-outlet>
+    <app-digital-assistant></app-digital-assistant>
+    @if (!assistant.isOpen()) {
+    <button class="fab-trigger" (click)="assistant.open()" @fadeInOut>
+      <div class="icon-container">
+        <span class="chat-icon">💬</span>
+        <span class="pulse-ring"></span>
+      </div>
+      <span class="label">How can I help?</span>
+    </button>
+    }
   </main>
   <app-footer></app-footer>
 </div>
