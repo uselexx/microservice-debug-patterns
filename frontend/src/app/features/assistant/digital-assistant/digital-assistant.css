@@ -2,14 +2,11 @@
 .assistant-window {
   position: fixed;
   bottom: 50px;
-  /* Lowered slightly to account for extra height */
   left: 30px;
-  width: 420px;
-  /* Increased width slightly to maintain proportions */
+  width: 450px;
+  /* Slightly wider for side-by-side feel */
   height: 800px;
-  /* Explicit height for vertical size */
   max-height: 90vh;
-  /* Ensures it doesn't exceed the browser window */
   background: #f8f9fa;
   border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
@@ -70,58 +67,88 @@
 /* Updated Content Styles */
 .content {
   flex: 1;
-  padding: 25px;
+  padding: 20px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  /* Stack messages vertically */
+  gap: 20px;
 }
 
 /* Menu Grid for Process Selection */
+/* User Input Area (Menu Grid) - Aligned Right */
 .menu-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    align-self: flex-end; 
+    width: 90%;          
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
+/* Updated Menu Card for high contrast */
 .menu-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: white;
-  border: 1px solid #e9ecef;
-  padding: 15px;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: left;
+    align-self: flex-end;
+    width: 100%;
+    background: #007bff; 
+    border: none;
+    padding: 12px;
+    border-radius: 15px 15px 5px 15px; 
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.menu-card:hover {
-  background: #f0f7ff;
-  border-color: #007bff;
-  /* Moves card inward (right) when hovered */
-  transform: translateX(5px);
-}
-
-.menu-card .icon {
-  font-size: 20px;
-  background: #e7f1ff;
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-}
-
+/* Text visibility fixes */
 .menu-card strong {
-  display: block;
-  font-size: 14px;
-  color: #212529;
+    display: block;
+    font-size: 14px;
+    color: #ffffff; /* Forced White */
 }
 
 .menu-card small {
-  font-size: 12px;
-  color: #6c757d;
+    display: block;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.9); /* Bright off-white for description */
+}
+
+.menu-card .icon {
+    font-size: 20px;
+    background: rgba(255, 255, 255, 0.2); /* Semi-transparent white background */
+    color: #ffffff; /* Ensure icon itself is white if it's text-based */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+}
+
+.menu-card:hover {
+    background: #0056b3; /* Darker blue on hover */
+    transform: translateX(-5px);
+}
+
+
+
+.assistant-msg {
+  align-self: flex-start;
+  max-width: 85%;
+  background: white;
+  padding: 12px 16px;
+  border-radius: 15px 15px 15px 5px;
+  /* Rounded chat bubble look */
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.home-link {
+  align-self: flex-end;
+  margin-top: -10px;
+  color: #dc3545;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
 }
