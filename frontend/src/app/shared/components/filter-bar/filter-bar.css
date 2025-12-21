@@ -1,0 +1,61 @@
+.filter-container {
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f3f4f6;
+  margin-bottom: 2rem;
+
+  .filter-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-end;
+  }
+
+  .filter-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 200px;
+
+    label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    input,
+    select {
+      padding: 0.6rem;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+
+      &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+    }
+  }
+
+  .reset-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .badge {
+      background: #3b82f6;
+      color: white;
+      font-size: 0.7rem;
+      padding: 2px 6px;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+  }
+}

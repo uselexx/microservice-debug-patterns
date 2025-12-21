@@ -2,6 +2,12 @@
   <h1>Welcome to Microservice Debug Patterns</h1>
   <p>This application demonstrates modern Angular architecture with backend integration.</p>
 
+  <app-filter-bar 
+    *ngIf="filterConfig().length > 0"
+    [config]="filterConfig()" 
+    (onFilterChange)="handleFilterChange($event)">
+  </app-filter-bar>
+
   <button (click)="onFetchWeather()" [disabled]="isLoading()">
     {{ isLoading() ? 'Loading...' : 'Fetch Weather Forecast' }}
   </button>

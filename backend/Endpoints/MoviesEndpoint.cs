@@ -24,5 +24,26 @@ public static class MoviesEndpoint
             // response.Message contains the actual GetMovieResponse object
             return Results.Ok(response.Message);
         }).WithTags("Movies");
+
+        // Get the filter options
+        app.MapGet("/movies/filters", async () =>
+        {
+            var metadata = new
+            {
+                Categories = new[]
+                {
+                    new { Value = "weather_storm", Label = "Stormy" },
+                    new { Value = "weather_sunny", Label = "Sunny" },
+                    new { Value = "weather_cloudy", Label = "Cloudy" }
+                },
+                        Tags = new[]
+                {
+                    new { Value = "temp-high", Label = "High Temperature" },
+                    new { Value = "precip-low", Label = "Low Precipitation" },
+                    new { Value = "wind-warning", Label = "Wind Warning" }
+                }
+            };
+            return Results.Ok(metadata);
+        }).WithTags("Movies");
     }
 }

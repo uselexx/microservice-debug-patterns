@@ -1,0 +1,25 @@
+<div class="filter-container">
+  <form [formGroup]="filterForm" class="filter-grid">
+
+    <div *ngFor="let item of config" class="filter-item">
+      <label [for]="item.key">{{ item.label }}</label>
+
+      <input *ngIf="item.type === 'text'" [formControlName]="item.key" type="text" placeholder="Search...">
+
+      <select *ngIf="item.type === 'select' || item.type === 'multiselect'" [formControlName]="item.key"
+        [multiple]="item.type === 'multiselect'">
+        <option value="">All</option>
+        <option *ngFor="let opt of item.options" [value]="opt.value">
+          {{ opt.label }}
+        </option>
+      </select>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="reset-btn" (click)="resetFilters()">
+        Reset Filters
+        <span *ngIf="activeFilterCount > 0" class="badge">{{ activeFilterCount }}</span>
+      </button>
+    </div>
+  </form>
+</div>

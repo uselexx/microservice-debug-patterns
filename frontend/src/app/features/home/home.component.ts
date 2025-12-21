@@ -2,11 +2,12 @@ import { Component, signal, ChangeDetectionStrategy, OnInit, inject } from '@ang
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../../data-access/api/api.service';
 import { WeatherForecast } from '../../data-access/models/index';
+import { FilterBar, FilterConfig } from '../../shared/components/filter-bar/filter-bar';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FilterBar],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -15,11 +16,29 @@ export class HomeComponent implements OnInit {
   weatherData = signal<WeatherForecast[]>([]);
   isLoading = signal(false);
   errorMessage = signal('');
-
+  filterConfig = signal<FilterConfig[]>([]);
   private apiService = inject(ApiService);
 
   ngOnInit(): void {
-    // Optional: Load data on init
+    this.loadFilterMetadata();
+  }
+
+  loadFilterMetadata(): void {
+    this.apiService.get<any>('/movies/filters').subscribe({
+      next: (data) => {
+        // Set the config signal with the API response
+        this.filterConfig.set([
+          { key: 'search', label: 'Keyword', type: 'text' },
+          { key: 'category', label: 'Category', type: 'select', options: data.categories },
+          { key: 'tags', label: 'Tags', type: 'multiselect', options: data.tags }
+        ]);
+      },
+      error: (err) => console.error('Error loading filter data:', err)
+    });
+  }
+
+  handleFilterChange(filters: any): void {
+    console.log('Filters changed:', filters);
   }
 
   onFetchWeather(): void {
