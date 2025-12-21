@@ -1,6 +1,9 @@
 # Large Data Files
 InventoryService/Data/*
 
+# VS Code Settings
+.vs/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
