@@ -1,17 +1,17 @@
 <div class="step-layout">
     <div class="step-title">
-        <ng-container>
-            @if (isloading) {
-            <div class="typing-indicator">
-                <span></span><span></span><span></span>
-            </div>
-            } @else {
-            <span class="assistant-text">{{ assistantGreeting }}</span>
-            }
-        </ng-container>
+        @if (isloading) {
+        <div class="typing-indicator">
+            <span></span><span></span><span></span>
+        </div>
+        }
+
+        @if (assistantGreeting$ | async; as greeting) {
+        <span class="assistant-text">{{ greeting }}</span>
+        }
     </div>
 
-    @if (!isloading && assistantGreeting) {
+    @if (!isloading) {
     <div class="step-form-area animate-reveal">
         <div class="step-content">
             <label class="input-label">Username</label>
