@@ -26,6 +26,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 
+var aiBaseUrl = builder.Configuration.GetValue<string>("AISettings:BaseUrl");
+// Register Typed Client
+builder.Services.AddHttpClient<AIService>(client =>
+{
+    client.BaseAddress = new Uri(aiBaseUrl ?? throw new InvalidOperationException("AI Base URL is missing"));
+});
 // Database & Repositories
 builder.Services.AddDbContext<PGContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PostgreSQLConnection")));
@@ -64,6 +70,7 @@ app.MapHub<DashboardHub>("/hubs/dashboard");
 app.MapWeather();
 app.MapDashboard();
 app.MapMovies();
+app.MapAI();
 
 // 4. Fixed Background Task (Safe Scoping)
 _ = Task.Run(async () =>

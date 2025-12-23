@@ -13,14 +13,14 @@ import { AsyncPipe } from '@angular/common';
 })
 export class LoginStep implements OnInit {
   private assistant = inject(AssistantService);
-  isloading: boolean = false;
+  isLoading: boolean = false;
   username: string = '';
   // Initialize it directly
   assistantGreeting$!: Observable<string>;
 
   ngOnInit(): void {
     // 1. Start loading state immediately
-    this.isloading = true;
+    this.isLoading = true;
 
     // 2. Define the context for this specific step
     const stepContext = "The user is at the login screen and needs to provide their username.";
@@ -31,13 +31,13 @@ export class LoginStep implements OnInit {
     this.assistantGreeting$ = this.assistant.callLLM(stepContext).pipe(
       tap(() => {
         // This runs when the data arrives successfully
-        this.isloading = false;
+        this.isLoading = false;
         console.log('LLM response received, stopping animation.');
       }),
       catchError((err) => {
         // This runs if the API fails or CORS issues occur
         console.error('Assistant Error:', err);
-        this.isloading = false;
+        this.isLoading = false;
         // Return a fallback message so the UI doesn't break
         return of('Hello! Please enter your username to continue.');
       })

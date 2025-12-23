@@ -19,8 +19,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();
-builder.Services.AddHttpClient();
-builder.Services.AddScoped<OllamaService>();
+builder.Services.AddHttpClient<OllamaService>();
 
 var app = builder.Build();
 

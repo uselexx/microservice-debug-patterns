@@ -1,7 +1,7 @@
 using AIService.Services;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Contracts;
 using System.Diagnostics;
-using System.Threading.Tasks;
 
 namespace AIService.Controllers;
 
@@ -44,4 +44,3 @@ public class OllamaController : ControllerBase
     }
 }
 
-public record MistralRequest(string Prompt);

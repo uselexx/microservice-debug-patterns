@@ -1,3 +1,27 @@
-<p>product-selection-step works!</p>
+<div class="step-layout">
+    <div class="step-title">
+        @if (isLoading) {
+        <div class="typing-indicator">
+            <span></span><span></span><span></span>
+        </div>
+        }
 
-<p>Previous username: {{ previousUsername() }}</p>
+        @if (assistantGreeting$ | async; as greeting) {
+        <span class="assistant-text">{{ greeting }}</span>
+        }
+    </div>
+
+    @if (!isLoading) {
+    <div class="step-form-area animate-reveal">
+        <div class="step-content">
+            
+        </div>
+
+        <div class="step-actions">
+            <button class="primary-btn" (click)="submit()">
+                Continue
+            </button>
+        </div>
+    </div>
+    }
+</div>

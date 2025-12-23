@@ -10,7 +10,7 @@ public class OllamaService
     public OllamaService(HttpClient httpClient)
     {
         _httpClient = httpClient;
-        _httpClient.BaseAddress = new Uri("http://localhost:11434");
+        _httpClient.BaseAddress = new Uri("http://ollama:11434");
     }
 
     public async Task<string> AskMistralAsync(string prompt)
