@@ -51,18 +51,18 @@ builder.Services.AddScoped<MovieImportService>();
 
 // Deactivated because the job runs 22 Minutes at the moment
 // Will be added later when improved
-//builder.Services.AddQuartz(q =>
-//{
-//    var jobKey = new JobKey(nameof(MovieImportJob));
+builder.Services.AddQuartz(q =>
+{
+    var jobKey = new JobKey(nameof(MovieImportJob));
 
-//    q.AddJob<MovieImportJob>(opts => opts.WithIdentity(jobKey));
+    q.AddJob<MovieImportJob>(opts => opts.WithIdentity(jobKey));
 
-//    // Trigger 1: run immediately on startup
-//    q.AddTrigger(opts => opts
-//        .ForJob(jobKey)
-//        .WithIdentity("StartupTrigger")
-//        .StartNow()
-//    );
+    // Trigger 1: run immediately on startup
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("StartupTrigger")
+        .StartNow()
+    );
 
 //    // Trigger 2: Run every hour
 //    q.AddTrigger(opts => opts
@@ -72,12 +72,12 @@ builder.Services.AddScoped<MovieImportService>();
 //            .WithIntervalInHours(1)
 //            .RepeatForever())
 //    );
-//});
+});
 
-//builder.Services.AddQuartzHostedService(options =>
-//{
-//    options.WaitForJobsToComplete = true;
-//});
+builder.Services.AddQuartzHostedService(options =>
+{
+    options.WaitForJobsToComplete = true;
+});
 
 // Add mass transit
 
@@ -99,6 +99,34 @@ builder.Services.AddMassTransit(x =>
 });
 
 var host = builder.Build();
+
+using (var scope = host.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<ApplicationDbContext>();
+
+    // Retry logic: SQL Server might take a few seconds to boot up in Docker
+    for (int i = 0; i < 10; i++)
+    {
+        try
+        {
+            Console.WriteLine($"Attempting to migrate database... (Attempt {i + 1})");
+            await context.Database.MigrateAsync();
+            Console.WriteLine("Database migration successful!");
+            break; // Exit loop if successful
+        }
+        catch (Exception ex)
+        {
+            if (i == 9) // Final attempt failed
+            {
+                Console.WriteLine("Could not migrate database after 10 attempts.");
+                throw;
+            }
+            Console.WriteLine("Database not ready yet... waiting 2 seconds.");
+            await Task.Delay(2000); // Wait 2 seconds before retrying
+        }
+    }
+}
 
 Console.WriteLine("Inventory Service finished configuring and started!");
 await host.RunAsync();

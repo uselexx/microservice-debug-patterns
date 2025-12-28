@@ -1,4 +1,14 @@
 services:
+  tinder:
+    build:
+      context: /MovieTinderService
+    ports:
+      - "5010:8000"
+    volumes:
+      - ./MovieTinderService:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+
   backend:
     build:
       context: .
@@ -19,17 +29,17 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-
-  # orderService:
-  #   build:
-  #     context: .
-  #     dockerfile: OrderService/Dockerfile
-  #   image: microservice-debug-order-service:latest
-  #   ports:
-  #     - "5002:5000"
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-
+#
+#  # orderService:
+#  #   build:
+#  #     context: .
+#  #     dockerfile: OrderService/Dockerfile
+#  #   image: microservice-debug-order-service:latest
+#  #   ports:
+#  #     - "5002:5000"
+#  #   environment:
+#  #     - ASPNETCORE_ENVIRONMENT=Development
+#
   inventoryService:
     build:
       context: .
@@ -44,29 +54,29 @@ services:
         condition: service_healthy
       rabbitmq:
         condition: service_healthy
-
-  aiService:
-    build:
-      context: .
-      dockerfile: AIService/Dockerfile
-    image: microservice-debug-ai-service:latest
-    ports:
-      - "5004:8080"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-      - ollama
-
-  # frontend:
-  #   build:
-  #     context: .
-  #     dockerfile: frontend/Dockerfile
-  #   image: microservice-debug-frontend:latest
-  #   ports:
-  #     - "4200:80"
-  #   depends_on:
-  #     - backend
-
+#
+#  aiService:
+#    build:
+#      context: .
+#      dockerfile: AIService/Dockerfile
+#    image: microservice-debug-ai-service:latest
+#    ports:
+#      - "5004:8080"
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Development
+#    depends_on:
+#      - ollama
+#
+#  # frontend:
+#  #   build:
+#  #     context: .
+#  #     dockerfile: frontend/Dockerfile
+#  #   image: microservice-debug-frontend:latest
+#  #   ports:
+#  #     - "4200:80"
+#  #   depends_on:
+#  #     - backend
+#
   postgres:
     image: postgres:15
     environment:
@@ -104,20 +114,20 @@ services:
       timeout: 15s
       retries: 5
 
-  ollama:
-    image: ollama/ollama:latest
-    container_name: ollama
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama_storage:/root/.ollama
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+#  ollama:
+#    image: ollama/ollama:latest
+#    container_name: ollama
+#    ports:
+#      - "11434:11434"
+#    volumes:
+#      - ollama_storage:/root/.ollama
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: 1
+#              capabilities: [gpu]
 
 networks:
   default:
