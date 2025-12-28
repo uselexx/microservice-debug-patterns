@@ -70,6 +70,7 @@ app.MapHub<DashboardHub>("/hubs/dashboard");
 app.MapWeather();
 app.MapDashboard();
 app.MapMovies();
+app.MapSwipeEndpoints();
 app.MapAI();
 
 // 4. Fixed Background Task (Safe Scoping)

@@ -82,5 +82,33 @@ public class ApplicationDbContext : DbContext
             builder.Property(x => x.AdultsOnly)
                 .HasDefaultValue(false);
         });
+
+        modelBuilder.Entity<SwipeEntity>(builder =>
+        {
+            builder.ToTable("swipes");
+
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Id)
+                .ValueGeneratedOnAdd();
+
+            builder.Property(x => x.UserId)
+                .IsRequired();
+
+            builder.Property(x => x.MovieId)
+                .IsRequired();
+
+            // --- Add Foreign Key Configuration Here ---
+            builder.HasOne<MovieEntity>()          // Swipe has one Movie
+                .WithMany()                         // Movie can have many Swipes
+                .HasForeignKey(x => x.MovieId)      // The FK property in SwipeEntity
+                .OnDelete(DeleteBehavior.Cascade);  // Optional: Delete swipes if movie is deleted
+
+            builder.Property(x => x.IsLiked)
+                .IsRequired();
+
+            builder.Property(x => x.Timestamp)
+                .IsRequired();
+        });
     }
 }
