@@ -44,6 +44,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+builder.Services.AddScoped<ISwipesRepository, SwipesRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<MovieImportService>();
 
@@ -85,6 +86,8 @@ builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<GetMovieHandler>();
     x.AddConsumer<GetMoviesHandler>();
+    x.AddConsumer<GetSwipesHandler>();
+    x.AddConsumer<PostSwipeHandler>();
 
     x.UsingRabbitMq((context, cfg) =>
     {
